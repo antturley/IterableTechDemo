@@ -5,32 +5,17 @@ var click = 0;
 function identifyUser() {
     _iaq.push(['identify', document.getElementById('email').value, {
         "firstName": "Anthony",
-        //"isWebUser": true,
-        //"SA_WebUser_Test_Key": "completed"
-    }]);
-    //Added to this method becuase the second method would not
-    try{
-    _iaq.push(['track', 'webSATestEvent', {
-        "platform": "web",
-        "isTestEvent":true,
-        "url":"https://iterable.com/sa-test/Anthony",
-        "secret_code_key": "Code_2022"
-    }]);
-   } catch (error) {
-      console.log(error); 
-   }
-   
+        "isWebUser": true,
+        "SA_WebUser_Test_Key": "completed"
+    }]);    
 }
 
 // Track a click event, passing a click count (from the current session)
 // that will be stored in the event's dataFields property
 function trackEvent() {
-    _iaq.push(['identify', document.getElementById('email').value, {
-        "firstName": "Anthony",
-        //"isWebUser": true,
-        //"SA_WebUser_Test_Key": "completed"
-    }]);
-    //Added to this method becuase the second method would not
+    //Used this call to set the identity 
+    _iaq.push(['identify', document.getElementById('email').value, {"firstName": "Anthony"}]);
+    //Create new custom event via track
     try{
     _iaq.push(['track', 'webSATestEvent', {
         "platform": "web",
@@ -43,13 +28,28 @@ function trackEvent() {
    }
 }
 
-(function (){
-    _iaq.push(['getMessages', {
-        "messageMedium":"InApp",
+//Not working - Try hitting the template endpoint from xhr instead and pass
+//api key to header
+function getHtmlContent(){
+    _iaq.push(['identify','antturley@gmail.com', {"firstName": "Anthony"}]);
+    _iaq.push(['getSentMessages', {
         "email":"antturley@gmail.com",
-        "limit": 10
-    }]);
-});
+        "userid":"",
+        "limit":10,
+        "campaignIds":"",
+        "startDateTime":"",
+        "endDateTime":"",
+        "excludeBlastCampaigns":false,
+        "messageMedium":"InApp"
+    }, getMessage()]);
+
+}
+
+ function getMessage(msg){
+    let ele = document.getElementById('success');
+    ele.innerHTML = toString(msg) != null ? "N/A" : msg;
+}
+
 
 // Replace <API key> with an Iterable API key (of type JavaScriptSDK)
 _iaq.push(['account', 'ff288e91e5f9442cb6ce6ea238886298']);
